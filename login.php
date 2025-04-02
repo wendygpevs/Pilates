@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta</title>
+    <title>Iniciar Sesión</title>
     <style>
         body {
             display: flex;
@@ -33,7 +33,7 @@
         }
         .btn {
             width: 100%;
-            background-color: #28a745;
+            background-color: #1e64f0;
             color: white;
             padding: 12px;
             border: none;
@@ -42,7 +42,7 @@
             cursor: pointer;
         }
         .btn:hover {
-            background-color: #218838;
+            background-color: #1558c0;
         }
         .links {
             margin-top: 15px;
@@ -51,15 +51,9 @@
         .links a {
             text-decoration: none;
             color: gray;
-            cursor: pointer;
         }
         .error {
             color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .success {
-            color: green;
             font-size: 14px;
             margin-bottom: 10px;
         }
@@ -67,26 +61,21 @@
 </head>
 <body>
     <div class="container">
-        <h2>Crear Cuenta</h2>
-        
+        <h2>Iniciar Sesión</h2>
+    
         <form method="POST" action="">
-            <input type="text" name="nombre" placeholder="Nombre Completo" required>
             <input type="email" name="email" placeholder="Correo Electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
-            <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required>
-            <input type="text" name="telefono" placeholder="Teléfono (Opcional)">
-            <button type="submit" class="btn">Crear Cuenta</button>
+            <button type="submit" class="btn">→ INGRESAR</button>
         </form>
         <div class="links">
-            <a href="#" onclick="redirigirLogin()">Iniciar Sesión</a>
+            <a href="#"onclick="redirigirregistrar()">CREAR CUENTA</a> 
         </div>
     </div>
-    
     <script>
-        function redirigirLogin() {
-            window.location.href = "login.html";
+        function redirigirregistrar() {
+            window.location.href = "registro.php";
         }
     </script>
-    
 </body>
 </html>
