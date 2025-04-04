@@ -1,92 +1,76 @@
+<?php
+require_once 'conexion.php'; // tu archivo de conexión
+session_start();
+
+$error = '';
+$exito = '';
+
+// Cuando se envía el formulario
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    // Validaciones básicas
+    if (!empty($email) && !empty($password)) {
+
+        // Comprobar si el correo ya está registrado
+        $stmt = $conn->prepare("SELECT id FROM usuarios WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $error = "Este correo ya está registrado.";
+        } else {
+            // Hashear la contraseña
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Insertar en la base de datos
+            $stmt = $conn->prepare("INSERT INTO usuarios (email, password) VALUES (?, ?)");
+            $stmt->bind_param("ss", $email, $hashed_password);
+
+            if ($stmt->execute()) {
+                $exito = "Registro exitoso. Puedes iniciar sesión ahora.";
+            } else {
+                $error = "Error al registrar el usuario.";
+            }
+        }
+
+        $stmt->close();
+    } else {
+        $error = "Por favor completa todos los campos.";
+    }
+}
+?>
+
+<!-- HTML del formulario -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Cuenta</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .btn {
-            width: 100%;
-            background-color: #28a745;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #218838;
-        }
-        .links {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .links a {
-            text-decoration: none;
-            color: gray;
-            cursor: pointer;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        .success {
-            color: green;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>Registro</title>
+    <link rel="stylesheet" href="registro.css"> <!-- Tu archivo CSS si tienes -->
 </head>
 <body>
     <div class="container">
         <h2>Crear Cuenta</h2>
-        
-        <form method="POST" action="">
-            <input type="text" name="nombre" placeholder="Nombre Completo" required>
+
+        <?php if (!empty($error)): ?>
+            <div class="error"><?php echo $error; ?></div>
+        <?php endif; ?>
+
+        <?php if (!empty($exito)): ?>
+            <div class="exito"><?php echo $exito; ?></div>
+        <?php endif; ?>
+
+        <form method="POST" action="registro.php">
             <input type="email" name="email" placeholder="Correo Electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
-            <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required>
-            <input type="text" name="telefono" placeholder="Teléfono (Opcional)">
-            <button type="submit" class="btn">Crear Cuenta</button>
+            <button type="submit" class="btn">Registrarse</button>
         </form>
         <div class="links">
-            <a href="#" onclick="redirigirLogin()">Iniciar Sesión</a>
+            <a href="login.php">¿Ya tienes cuenta? Inicia sesión</a>
         </div>
     </div>
-    
-    <script>
-        function redirigirLogin() {
-            window.location.href = "login.php";
-        }
-    </script>
-    
 </body>
 </html>

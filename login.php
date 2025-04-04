@@ -1,81 +1,52 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
+<?php
+session_start();
+require_once 'conexion.php'; // Tu archivo de conexión
+
+// Verifica si se ha enviado el formulario
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recibe los datos del formulario
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    // Verifica que no estén vacíos
+    if (!empty($email) && !empty($password)) {
+        // Prepara la consulta para evitar inyecciones SQL
+        $stmt = $conn->prepare("SELECT id, password FROM usuarios WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultado = $stmt->get_result();
+
+        if ($resultado->num_rows === 1) {
+            $usuario = $resultado->fetch_assoc();
+
+            // Verifica el password con password_verify
+            if (password_verify($password, $usuario['password'])) {
+                // Autenticación correcta: inicia sesión
+                $_SESSION['usuario_id'] = $usuario['id'];
+                $_SESSION['email'] = $email;
+
+                // Redirecciona a página principal
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                $error = "Contraseña incorrecta.";
+            }
+        } else {
+            $error = "El correo no está registrado.";
         }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .btn {
-            width: 100%;
-            background-color: #1e64f0;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #1558c0;
-        }
-        .links {
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .links a {
-            text-decoration: none;
-            color: gray;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Iniciar Sesión</h2>
-    
-        <form method="POST" action="">
-            <input type="email" name="email" placeholder="Correo Electrónico" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-            <button type="submit" class="btn">→ INGRESAR</button>
-        </form>
-        <div class="links">
-            <a href="#"onclick="redirigirregistrar()">CREAR CUENTA</a> 
-        </div>
-    </div>
-    <script>
-        function redirigirregistrar() {
-            window.location.href = "registro.php";
-        }
-    </script>
-</body>
-</html>
+
+        $stmt->close();
+    } else {
+        $error = "Por favor completa todos los campos.";
+    }
+}
+?>
+<form method="POST" action="login.php">
+    <input type="email" name="email" placeholder="Correo Electrónico" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <button type="submit" class="btn">→ INGRESAR</button>
+
+    <?php if (!empty($error)): ?>
+        <div class="error"><?php echo $error; ?></div>
+    <?php endif; ?>
+</form>
