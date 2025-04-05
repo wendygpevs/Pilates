@@ -32,7 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// No need to close the connection explicitly
 ?>
 
 <!DOCTYPE html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Pilates Reform - Clases del Tutor</title>
-  <link rel="stylesheet" href="../estilos/tutor.css">
+  <link rel="stylesheet" href="../styles/tutor.css">
 </head>
 <body>
   <header>
