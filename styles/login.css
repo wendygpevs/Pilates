@@ -81,19 +81,14 @@ input:focus {
 /* Enlaces */
 .links {
     margin-top: 15px;
-    font-size: 14px;
 }
 
 .links a {
     text-decoration: none;
-    color: #555;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    color: #1e64f0;
 }
 
-/* Hover en enlaces */
 .links a:hover {
-    color: #1e64f0;
     text-decoration: underline;
 }
 
