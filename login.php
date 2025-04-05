@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         </form>
         <div class="links">
+            <a href="tutoreslogin.php" class="btn spy-tutor-btn">Soy Tutor</a>
             <a href="registro.php" >No tengo cuenta. Registrarme</a>
         </div>
     </div>

@@ -78,20 +78,14 @@ input:focus {
     transform: scale(1.05);
 }
 
-/* Estilos para el botón Soy Tutor */
-.spy-tutor-btn {
-    position: fixed;
-    bottom: 20px; /* Adjust as needed */
-    left: 20px; /* Adjust as needed */
-    width: auto; /* Allow the button to size based on content */
-}
+/* Enlaces */
 .links {
     margin-top: 15px;
 }
 
 .links a {
     text-decoration: none;
-    color: #ff0e0e;
+    color: #1e64f0;
 }
 
 .links a:hover {
