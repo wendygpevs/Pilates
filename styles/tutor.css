@@ -1,75 +1,68 @@
 body {
+  background-color: #fdf8ef;
+  font-family: Arial, sans-serif;
   margin: 0;
-  font-family: 'Georgia', serif;
-  background-color: #f6f2e7;
+  padding: 0;
 }
 
-header {
+.header {
   background-color: #000;
   color: white;
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 30px;
-}
-
-header h1 {
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.user {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 16px;
-}
-
-.user-icon {
-  background-color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-}
-
-.container {
-  text-align: center;
-  padding: 30px;
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.sub {
   font-style: italic;
-  color: #3a7141;
+  font-size: 12px;
 }
 
-.note {
-  margin-top: 10px;
-  font-size: 14px;
+.nav a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
 }
 
-.clases {
+.tutor-nombre {
+  margin-left: 20px;
+}
+
+.titulo {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.info {
+  text-align: center;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.clases-contenedor {
   display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-top: 40px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 0 20px;
 }
 
-.dia {
+.clase-box {
   border: 3px solid darkred;
-  border-radius: 25px;
-  padding: 20px;
-  width: 200px;
-  min-height: 200px;
+  border-radius: 20px;
+  padding: 15px;
+  width: 250px;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: white;
 }
 
-.dia h3 {
-  border-bottom: 2px solid darkred;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
-
-.dia p {
-  margin: 10px 0;
-  font-size: 14px;
+.clase-box h2 {
+  color: darkred;
+  margin-bottom: 5px;
 }
