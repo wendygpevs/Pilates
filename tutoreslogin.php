@@ -1,29 +1,32 @@
 <?php
 require_once 'app pilates/conexion.php';
 
-// Create connection
 $conn = Conexion::conectar();
-
-// Start session
 session_start();
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
-    $especialidad = $_POST['especialidad']; // Get the specialty from the form
+    $especialidad = $_POST['especialidad'];
 
-    // SQL query to check if the email exists
-    $sql = "SELECT * FROM tutores WHERE email = '$email'";
-    $result = $conn->query($sql);
+    // Consulta preparada para obtener el tutor por email
+    $sql = "SELECT * FROM tutores WHERE email = :email";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':email', $email);
+    $stmt->execute();
 
-    if ($result->rowCount() > 0) {
-        // Fetch the tutor's data
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        
-        // Verify the specialty
+    if ($stmt->rowCount() > 0) {
+        // Obtener los datos del tutor
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verificar la especialidad
         if ($row['especialidad'] === $especialidad) {
+            // Guardar el ID y el nombre del tutor en sesión
             $_SESSION['tutor_id'] = $row['id_tutor'];
-            header("Location: index.php"); // Redirect to the home page
+            $_SESSION['tutor'] = $row['nombre'];
+
+            // Redirigir a la página de ver estudiantes
+            header("Location: tutor_clases.php");
+            exit();
         } else {
             echo "Especialidad incorrecta.";
         }
@@ -31,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No hay tutores con ese email.";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
