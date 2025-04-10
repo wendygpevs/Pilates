@@ -11,38 +11,41 @@ $conn   = Conexion::conectar();
 $userId = $_SESSION['usuario_id'];
 
 $days_full = [
-  'Mon' => 'Lunes',
-  'Tue' => 'Martes',
-  'Wed' => 'Miércoles',
-  'Thu' => 'Jueves',
-  'Fri' => 'Viernes',
-  'Sat' => 'Sábado',
-  'Sun' => 'Domingo'
+  'Mon' => 'Lunes', 'Tue' => 'Martes', 'Wed' => 'Miércoles',
+  'Thu' => 'Jueves', 'Fri' => 'Viernes', 'Sat' => 'Sábado', 'Sun' => 'Domingo'
 ];
 
 // 1) Procesar POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $day     = $_POST['day'];
-  $time    = $_POST['time'];    // e.g. "7:00 AM"
+  $time    = $_POST['time'];
   $tutorId = $_POST['tutor'];
   $classId = $_POST['clase'];
   $seats   = $_POST['seats'] ?? [];
 
-  // Convertir a DATETIME
   $dt = "$day " . date('H:i:s', strtotime($time));
 
-  // Buscar o crear horario
+  // Buscar o crear horario con tutor
   $stmtH = $conn->prepare("
       SELECT id_horario FROM horarios 
-      WHERE id_clase = :cid AND fecha_hora = :fh
-    ");
-  $stmtH->execute([':cid' => $classId, ':fh' => $dt]);
+      WHERE id_clase = :cid AND fecha_hora = :fh AND id_tutor = :tutor
+  ");
+  $stmtH->execute([
+      ':cid' => $classId,
+      ':fh' => $dt,
+      ':tutor' => $tutorId
+  ]);
   $hid = $stmtH->fetchColumn();
+
   if (!$hid) {
     $conn->prepare("
-          INSERT INTO horarios (id_clase, fecha_hora)
-          VALUES (:c, :fh)
-        ")->execute([':c' => $classId, ':fh' => $dt]);
+        INSERT INTO horarios (id_clase, fecha_hora, id_tutor)
+        VALUES (:c, :fh, :tutor)
+    ")->execute([
+        ':c' => $classId,
+        ':fh' => $dt,
+        ':tutor' => $tutorId
+    ]);
     $hid = $conn->lastInsertId();
   }
 
@@ -50,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmtR = $conn->prepare("
       INSERT INTO reservas (id_usuario, id_horario)
       VALUES (:u, :h)
-    ");
+  ");
   foreach ($seats as $s) {
     $stmtR->execute([':u' => $userId, ':h' => $hid]);
   }
@@ -66,23 +69,20 @@ $tutorId    = $_GET['tutor'];
 $classId    = $_GET['clase'];
 $showSuccess = isset($_GET['success']);
 
-// Datos tutor
 $stmtT = $conn->prepare("SELECT nombre FROM tutores WHERE id_tutor = :i");
 $stmtT->execute([':i' => $tutorId]);
 $tname = $stmtT->fetchColumn();
 
-// Datos clase
 $stmtC = $conn->prepare("SELECT nombre_clase, cupo_maximo FROM clases WHERE id_clase = :i");
 $stmtC->execute([':i' => $classId]);
 $c = $stmtC->fetch(PDO::FETCH_ASSOC);
 
-// Obtener id_horario
+// Obtener id_horario con tutor
 $dt = "$day " . date('H:i:s', strtotime($time));
-$stmtH = $conn->prepare("SELECT id_horario FROM horarios WHERE id_clase=:cid AND fecha_hora=:fh");
-$stmtH->execute([':cid' => $classId, ':fh' => $dt]);
+$stmtH = $conn->prepare("SELECT id_horario FROM horarios WHERE id_clase=:cid AND fecha_hora=:fh AND id_tutor=:tutor");
+$stmtH->execute([':cid' => $classId, ':fh' => $dt, ':tutor' => $tutorId]);
 $hid = $stmtH->fetchColumn();
 
-// Contar ocupados
 $occ = 0;
 if ($hid) {
   $stmtRO = $conn->prepare("SELECT COUNT(*) FROM reservas WHERE id_horario = :h");
@@ -95,14 +95,11 @@ $cleanUrl = "confirmar.php?day=$day&time=" . urlencode($time) . "&tutor=$tutorId
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Confirmar Reserva</title>
   <link rel="stylesheet" href="styles/confirmar.css">
 </head>
-
 <body>
   <div class="calendar-container">
     <header class="calendar-header">
@@ -130,41 +127,19 @@ $cleanUrl = "confirmar.php?day=$day&time=" . urlencode($time) . "&tutor=$tutorId
         <?php endfor; ?>
       </div>
 
-      <div class="legend">
-        <div class="legend-item legend-available">
-          <div class="legend-color"></div><span>Disponible</span>
-        </div>
-        <div class="legend-item legend-selected">
-          <div class="legend-color"></div><span>Seleccionado</span>
-        </div>
-        <div class="legend-item legend-occupied">
-          <div class="legend-color"></div><span>Ocupado</span>
-        </div>
-      </div>
-
       <div class="confirm-wrapper">
         <button type="submit" class="confirm-btn">Confirmar Reservación</button>
       </div>
     </form>
   </div>
 
-  <div id="success-modal" class="modal">
-    <div class="modal-content">
-      <p>¡Reservación confirmada!</p>
-      <button id="modal-ok" class="modal-ok-btn">Aceptar</button>
+  <?php if ($showSuccess): ?>
+    <div id="success-modal" class="modal" style="display:flex;">
+      <div class="modal-content">
+        <p>¡Reservación confirmada!</p>
+        <button onclick="window.location.replace('<?php echo $cleanUrl; ?>')" class="modal-ok-btn">Aceptar</button>
+      </div>
     </div>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      <?php if ($showSuccess): ?>
-        document.getElementById('success-modal').style.display = 'flex';
-      <?php endif; ?>
-      document.getElementById('modal-ok').addEventListener('click', function() {
-        window.location.replace('<?php echo $cleanUrl; ?>');
-      });
-    });
-  </script>
+  <?php endif; ?>
 </body>
-
 </html>
