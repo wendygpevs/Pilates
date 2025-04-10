@@ -1,0 +1,201 @@
+/* importar Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* GLOBAL */
+* {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f1e7;
+  color: #4a4a4a;
+  padding: 20px;
+}
+
+/* CONTENEDOR PRINCIPAL */
+.calendar-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 0;
+}
+
+/* ENCABEZADO */
+.calendar-header {
+  background: #000000;
+  color: #ffffff;
+  padding: 20px;
+  text-align: center;
+}
+
+.calendar-header h2 {
+  font-weight: 600;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.calendar-header p {
+  color: #cccccc;
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* ASIENTOS */
+.seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.seat-input {
+  display: none;
+}
+
+.seat-label {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #459c6b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #ffffff;
+  color: #459c6b;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.seat-label:hover {
+  transform: translateY(-2px);
+}
+
+.seat-input:checked+.seat-label {
+  background: #459c6b;
+  color: #fff;
+  border-color: #459c6b;
+}
+
+.seat-input[disabled]+.seat-label {
+  background: #ccc;
+  border-color: #999;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* LEYENDA */
+.legend {
+  display: flex;
+  gap: 20px;
+  padding: 15px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #4a4a4a;
+}
+
+.legend-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #000;
+}
+
+.legend-available .legend-color {
+  background: #fff;
+}
+
+.legend-selected .legend-color {
+  background: #459c6b;
+}
+
+.legend-occupied .legend-color {
+  background: #ccc;
+}
+
+/* BOTÓN CONFIRMAR */
+.confirm-wrapper {
+  background: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.confirm-btn {
+  background: #459c6b;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.confirm-btn:hover {
+  background: #3a7a52;
+  transform: translateY(-2px);
+}
+
+/* MODAL DE ÉXITO */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content p {
+  font-size: 1.2rem;
+  color: #4a4a4a;
+  margin-bottom: 20px;
+}
+
+.modal-ok-btn {
+  background: #459c6b;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.modal-ok-btn:hover {
+  background: #3a7a52;
+  transform: translateY(-1px);
+}
