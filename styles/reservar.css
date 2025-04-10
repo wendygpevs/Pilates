@@ -1,0 +1,179 @@
+/* importar Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* GLOBAL */
+* {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: #f5f1e7;
+  color: #4a4a4a;
+  padding: 20px;
+}
+
+/* CONTENEDOR */
+.calendar-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+/* ENCABEZADO */
+.calendar-header {
+  background: #000;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+.calendar-header h2 {
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+/* NAVEGACIÓN SEMANAL */
+.week-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 15px 0;
+  border-bottom: 1px solid #ddd;
+}
+.week-arrow {
+  font-size: 1.5rem;
+  color: #000;
+  text-decoration: none;
+  padding: 0 15px;
+  transition: color 0.3s;
+}
+.week-arrow:hover { color: #459c6b; }
+
+.week-days {
+  display: flex;
+  gap: 10px;
+}
+/* Aseguramos que nombre y número queden en columna */
+.day-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+  padding: 8px 0;
+  background: #eaeaea;
+  border-radius: 6px;
+  color: #4a4a4a;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+.day-item:hover { background: #d4d4d4; }
+.day-item.active {
+  background: #459c6b;
+  color: #fff;
+}
+.day-name { font-weight: 500; }
+.day-number {
+  margin-top: 4px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* SLOTS */
+.slot-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+}
+.slot-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+/* Hora fuera del recuadro */
+.slot-wrapper .slot-time {
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  background: #000;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+/* Recuadro principal ahora auto-ajustable */
+.slot-cell {
+  margin-top: 10px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  min-height: 140px;   /* mínimo para la descripción */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.slot-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* DETALLES */
+.slot-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 70%;
+}
+.slot-details .trainer {
+  font-weight: 600;
+  color: #000;
+}
+.slot-details .class-type {
+  font-weight: 500;
+  color: #144530;
+}
+.slot-details .class-duration {
+  font-size: 0.9rem;
+  color: #727976;
+}
+.slot-details .class-desc {
+  font-size: 0.85rem;
+  color: #727976;
+  line-height: 1.2;
+  max-height: 2.4em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.slot-details .available {
+  margin-top: 4px;
+  font-weight: 500;
+  color: #459c6b;
+}
+
+/* BOTÓN */
+.reserve-slot {
+  background: #459c6b;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+  align-self: center;
+}
+.reserve-slot:hover {
+  background: #3a7a52;
+  transform: translateY(-1px);
+}
