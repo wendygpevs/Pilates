@@ -4,17 +4,17 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #1e64f0, #1558c0);
-    font-family: 'Arial', sans-serif;
+    background-color: #f5f1e7; /* Changed from blue gradient to light beige */
+    font-family: 'WooCommerce', Arial, sans-serif; /* Changed font-family */
     margin: 0;
 }
 
 /* Contenedor del formulario */
 .container {
-    background: white;
+    background: #f9f9f9; /* Changed from white to light neutral */
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 10px 15px #99b05991; /* Harmonized shadow */
     text-align: center;
     width: 100%;
     max-width: 360px;
@@ -36,8 +36,8 @@ body {
 /* Título */
 h2 {
     margin-bottom: 20px;
-    color: #1e64f0;
-    font-weight: bold;
+    color: #144530; /* Changed from blue to greenish */
+    font-weight: 600;
 }
 
 /* Campos de entrada */
@@ -45,7 +45,7 @@ input {
     width: 100%;
     padding: 12px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #99b059; /* Changed border color */
     border-radius: 5px;
     font-size: 16px;
     transition: all 0.3s ease;
@@ -53,28 +53,28 @@ input {
 
 /* Efecto al enfocar los inputs */
 input:focus {
-    border-color: #1e64f0;
-    box-shadow: 0 0 5px rgba(30, 100, 240, 0.5);
+    border-color: #459c6b; /* Changed focus border color */
+    box-shadow: 0 0 5px rgba(69, 156, 107, 0.5);
     outline: none;
 }
 
 /* Botón */
 .btn {
     width: 100%;
-    background-color: #1e64f0;
+    background-color: #459c6b; /* Changed from blue to greenish */
     color: white;
     padding: 12px;
     border: none;
     border-radius: 5px;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 /* Efecto hover del botón */
 .btn:hover {
-    background-color: #1558c0;
+    background-color: #3a7a54; /* Darker green on hover */
     transform: scale(1.05);
 }
 
@@ -91,7 +91,7 @@ input:focus {
 
 .links a {
     text-decoration: none;
-    color: #ff0e0e;
+    color: #459c6b; /* Changed link color to greenish */
 }
 
 .links a:hover {
