@@ -26,7 +26,7 @@
         <br>
         <li><a href="index.php">Home</a><i class="fas fa-home" style="color: white;"></i></li> 
         <br><br>
-        <li><a href="reservar.php">Reserve</a><i class="fas fa-calendar-check" style="color: white;"></i></li> 
+        <li><a href="calendario.php">Reserve</a><i class="fas fa-calendar-check" style="color: white;"></i></li> 
         <br><br>
         <li><a href="login.php">Usuario</a><i class="fas fa-user" style="color: white;"></i></li>  
         <br><br>

@@ -6,54 +6,38 @@ date_default_timezone_set('America/Mexico_City');
 
 $conn = Conexion::conectar();
 
-// Día seleccionado (formato YYYY-MM-DD) o hoy
+// Día seleccionado (formato YYYY-MM-DD) — seguimos recibiéndolo por si en el futuro lo necesitas
 $day = isset($_GET['day']) ? $_GET['day'] : date('Y-m-d');
-// Número del día de la semana (1 = lunes, 7 = domingo)
-$dayNumber = date("N", strtotime($day));
 
-// 1) Obtener todas las clases ordenadas
-$stmtClasses = $conn->prepare("
-  SELECT id_clase, nombre_clase
-  FROM clases
-  ORDER BY id_clase
+// 1) Obtener *cada tutor con su clase* (antes era sólo clases)
+$stmt = $conn->prepare("
+  SELECT
+    t.id_tutor,
+    t.nombre         AS trainer,
+    c.id_clase,
+    c.nombre_clase   AS classType
+  FROM tutores t
+  JOIN clases c ON c.id_tutor = t.id_tutor
+  ORDER BY t.id_tutor
 ");
-$stmtClasses->execute();
-$classes = $stmtClasses->fetchAll(PDO::FETCH_ASSOC);
+$stmt->execute();
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// 2) Seleccionar la clase del día (todos la imparten igual)
-if (count($classes) > 0) {
-  $selectedClass = $classes[($dayNumber - 1) % count($classes)]['nombre_clase'];
-} else {
-  $selectedClass = 'N/A';
-}
-
-// 3) Obtener todos los tutores
-$stmtTutors = $conn->prepare("
-  SELECT id_tutor, nombre
-  FROM tutores
-  ORDER BY id_tutor
-");
-$stmtTutors->execute();
-$tutors = $stmtTutors->fetchAll(PDO::FETCH_ASSOC);
-
-// 4) Generar el horario de 6 AM a 7 PM, asignando tutores cíclicamente
+$count = count($rows);
 $schedule = [];
-$total = 0;
+
+// 2) Generar franjas de 6 AM a 7 PM asignando *cíclicamente* cada tutor y su clase
 for ($hour = 6; $hour <= 19; $hour++) {
+  $idx  = ($hour - 6) % $count;
   $time = date("g:00 A", mktime($hour, 0, 0));
-  if (count($tutors) > 0) {
-    $tutor = $tutors[$total % count($tutors)]['nombre'];
-  } else {
-    $tutor = 'N/A';
-  }
+
   $schedule[] = [
     'time'      => $time,
-    'trainer'   => $tutor,
-    'classType' => $selectedClass
+    'trainer'   => $rows[$idx]['trainer'],
+    'classType' => $rows[$idx]['classType']
   ];
-  $total++;
 }
 
-// 5) Devolver JSON
+// 3) Devolver JSON
 header('Content-Type: application/json');
 echo json_encode($schedule);
